@@ -1,6 +1,6 @@
 # ChurchConnect
 
-ChurchConnect is a full-stack church website foundation for **Grace Community Church**, a fictional Riverdale congregation. The public site includes church information, events, sermons, a private prayer request form, and contact form. Administrators can securely manage events and sermons and review submitted messages.
+ChurchConnect is a full-stack church website foundation for **Grace Community Church**, a fictional Riverdale congregation. The public site includes church information, events, sermons, announcements, ministries, private prayer requests, and a contact form. Administrators can securely manage content, review inbox submissions, and manage event registrations.
 
 ## Stack
 
@@ -22,10 +22,10 @@ ChurchConnect is a full-stack church website foundation for **Grace Community Ch
 3. Start MongoDB.
 4. Create the first administrator from an interactive terminal: `npm run admin:create --workspace backend`. The password is entered without being echoed; choose a unique password of at least 12 characters. There is no public registration route.
 5. Start the frontend and API with `npm run dev`.
-6. Visit `http://localhost:5173`. The API runs on port `5000`; fictional sample events and sermons are added idempotently after the first successful database connection. To seed them separately, run `npm run seed --workspace backend`.
+6. Visit `http://localhost:5173`. The API runs on port `5000`; fictional sample events, sermons, announcements, and ministries are added idempotently after the first successful database connection. To seed them separately, run `npm run seed --workspace backend`.
 7. The administrator sign-in is at `http://localhost:5173/admin/login`.
 
-The app fails clearly on startup if the database is unavailable or required environment settings are missing. Sample events and sermons use `$setOnInsert`, so startup does not replace content that has already been edited or create duplicate sample records. The sample content is fictional; replace it before launch.
+The app fails clearly on startup if the database is unavailable or required environment settings are missing. Sample records use `$setOnInsert`, so startup does not replace content that has already been edited or create duplicate sample records. The sample content is fictional; replace it before launch.
 
 ## Environment
 
@@ -66,18 +66,37 @@ Successful responses use `{ "data": ... }`; errors use `{ "error": "...", "detai
 | `GET` | `/api/health` | Public | API and database health. |
 | `GET` | `/api/public/events` | Public | List events; clients show upcoming dates before past dates. |
 | `GET` | `/api/public/sermons?search=` | Public | List/search sermons by title or speaker. |
+| `GET` | `/api/public/announcements` | Public | List published announcements within their publish and expiry window. |
+| `GET` | `/api/public/ministries` | Public | List active ministry groups and their public meeting/contact details. |
+| `POST` | `/api/public/events/:eventId/register` | Public, rate limited | Register 1–10 attendees (including the registrant) for a future event; one email can register once per event. |
 | `POST` | `/api/public/prayer-requests` | Public, rate limited | Submit a private prayer request. |
 | `POST` | `/api/public/contact-messages` | Public, rate limited | Submit a contact message. |
 | `POST` | `/api/auth/login` | Public, rate limited | Sign in and set the session cookie. |
 | `GET` | `/api/auth/me` | Admin | Return the current administrator. |
 | `POST` | `/api/auth/logout` | Admin | Clear the session cookie. |
-| `GET` | `/api/admin/overview` | Admin | Return event, sermon, prayer, and contact counts. |
-| `GET` | `/api/admin/events` or `/api/admin/sermons` | Admin | List managed records. |
-| `POST` | `/api/admin/events` or `/api/admin/sermons` | Admin | Create a validated record. |
-| `PUT` | `/api/admin/events/:id` or `/api/admin/sermons/:id` | Admin | Update a validated record. |
-| `DELETE` | `/api/admin/events/:id` or `/api/admin/sermons/:id` | Admin | Delete a record. |
+| `GET` | `/api/admin/overview` | Admin | Return counts for events, sermons, announcements, ministries, registrations, and inbox items, including unreviewed counts. |
+| `GET` | `/api/admin/events`, `/sermons`, `/announcements`, or `/ministries` | Admin | List managed records. |
+| `POST` | `/api/admin/events`, `/sermons`, `/announcements`, or `/ministries` | Admin | Create a validated record. |
+| `PUT` | `/api/admin/events/:id`, `/sermons/:id`, `/announcements/:id`, or `/ministries/:id` | Admin | Update a validated record. |
+| `DELETE` | `/api/admin/events/:id`, `/sermons/:id`, `/announcements/:id`, or `/ministries/:id` | Admin | Delete a record; deleting an event also deletes its registrations. |
 | `GET` | `/api/admin/prayer-requests` | Admin | Read private prayer requests. |
 | `GET` | `/api/admin/contact-messages` | Admin | Read contact messages. |
+| `PATCH` | `/api/admin/inbox/prayer-requests/:id/review` or `/api/admin/inbox/contact-messages/:id/review` | Admin | Mark a private inbox item reviewed or unreviewed using `{ "reviewed": true }`. |
+| `DELETE` | `/api/admin/inbox/prayer-requests/:id` or `/api/admin/inbox/contact-messages/:id` | Admin | Permanently delete a private inbox item. |
+| `GET` | `/api/admin/registrations?eventId=` | Admin | List event registrations, optionally filtered by event. Each record includes `attendeeCount`. |
+| `PATCH` | `/api/admin/registrations/:id` | Admin | Set registration status to `registered` or `cancelled`. |
+| `DELETE` | `/api/admin/registrations/:id` | Admin | Permanently delete a registration and its contact details. |
+
+Example event registration body:
+
+```json
+{
+  "name": "Alex Taylor",
+  "email": "alex@example.org",
+  "phone": "",
+  "attendeeCount": 2
+}
+```
 
 ## Security notes
 
@@ -86,6 +105,9 @@ Successful responses use `{ "data": ... }`; errors use `{ "error": "...", "detai
 - JWTs are stored only in HTTP-only, same-site cookies; dashboard APIs enforce administrator authentication server-side.
 - The API restricts CORS to `CLIENT_URL`, sets Helmet security headers, limits JSON request bodies, validates inputs, and rate-limits sign-in and public submissions.
 - Prayer request contents are not logged, and message routes are only mounted behind authentication.
+- Public announcements respect publish and expiry dates; inactive ministries stay hidden from public results.
+- Event registration collects only name, email, optional phone, and guest count. Registration lists and inbox actions require an authenticated administrator.
+- Event registration is rate limited and prevents duplicate registration by the same email for one event.
 - Use HTTPS in production. Keep `.env` files, credentials, database URLs, and real prayer/contact data out of version control.
 
 ## Project layout
@@ -95,7 +117,7 @@ backend/
   src/config/         Environment and database setup
   src/controllers/    Request handlers
   src/middleware/     Authentication
-  src/models/         Mongoose models
+  src/models/         Mongoose models for content, inbox, and registrations
   src/routes/         Public, admin, and auth routes
   src/scripts/        Sample content and administrator setup
   test/               Backend validation tests
