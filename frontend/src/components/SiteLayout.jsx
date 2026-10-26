@@ -4,7 +4,9 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 const links = [
   ["/about", "Our story"],
   ["/events", "Events"],
-  ["/sermons", "Messages"],
+  ["/sermons", "Sermons"],
+  ["/ministries", "Ministries"],
+  ["/announcements", "Updates"],
   ["/contact", "Contact"]
 ];
 
