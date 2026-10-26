@@ -35,6 +35,9 @@ export async function api(path, options = {}) {
 export const publicApi = {
   events: () => api("/public/events"),
   sermons: (search = "") => api(`/public/sermons${search ? `?search=${encodeURIComponent(search)}` : ""}`),
+  announcements: () => api("/public/announcements"),
+  ministries: () => api("/public/ministries"),
+  registerForEvent: (eventId, data) => api(`/public/events/${encodeURIComponent(eventId)}/register`, { method: "POST", body: JSON.stringify(data) }),
   pray: (data) => api("/public/prayer-requests", { method: "POST", body: JSON.stringify(data) }),
   contact: (data) => api("/public/contact-messages", { method: "POST", body: JSON.stringify(data) })
 };
@@ -49,5 +52,10 @@ export const adminApi = {
   update: (collection, id, data) => api(`/admin/${collection}/${id}`, { method: "PUT", body: JSON.stringify(data) }),
   remove: (collection, id) => api(`/admin/${collection}/${id}`, { method: "DELETE" }),
   prayerRequests: () => api("/admin/prayer-requests"),
-  contactMessages: () => api("/admin/contact-messages")
+  contactMessages: () => api("/admin/contact-messages"),
+  registrations: (eventId = "") => api(`/admin/registrations${eventId ? `?eventId=${encodeURIComponent(eventId)}` : ""}`),
+  updateRegistration: (id, status) => api(`/admin/registrations/${id}`, { method: "PATCH", body: JSON.stringify({ status }) }),
+  removeRegistration: (id) => api(`/admin/registrations/${id}`, { method: "DELETE" }),
+  reviewInbox: (type, id, reviewed) => api(`/admin/inbox/${type}/${id}/review`, { method: "PATCH", body: JSON.stringify({ reviewed }) }),
+  removeInboxMessage: (type, id) => api(`/admin/inbox/${type}/${id}`, { method: "DELETE" })
 };
