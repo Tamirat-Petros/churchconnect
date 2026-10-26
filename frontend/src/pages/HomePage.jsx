@@ -36,8 +36,19 @@ export default function HomePage() {
           <div className="hero-actions"><Link to="/about" className="button button-gold">Get to know us</Link><a href="#visit" className="button button-ghost">Plan your visit</a></div>
           <div className="hero-service"><span className="service-dot" /> SUNDAYS AT 10:00 AM <span className="service-divider">·</span> 24 WILLOW STREET</div>
         </div>
+        <aside className="hero-aside" aria-label="Sunday worship details">
+          <span className="hero-aside-mark" aria-hidden="true">g</span>
+          <p className="hero-aside-label">A SUNDAY TOGETHER</p>
+          <strong>There’s room<br />for <em>everyone.</em></strong>
+          <span className="hero-aside-rule" />
+          <p>Worship with us<br /><b>Sunday · 10:00 am</b></p>
+        </aside>
         <a className="hero-scroll" href="#welcome" aria-label="Scroll to learn more">↓</a>
       </section>
+
+      <div className="welcome-ribbon" aria-label="Come as you are. Grow together. Make room for everyone.">
+        <span>Come as you are</span><i aria-hidden="true">✳</i><span>Grow together</span><i aria-hidden="true">✳</i><span>Make room for everyone</span><i aria-hidden="true">✳</i><span>Come as you are</span>
+      </div>
 
       <section className="welcome-section page-width" id="welcome">
         <div className="welcome-copy">
