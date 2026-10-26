@@ -1,5 +1,7 @@
 import { Event } from "../models/Event.js";
 import { Sermon } from "../models/Sermon.js";
+import { Announcement } from "../models/Announcement.js";
+import { Ministry } from "../models/Ministry.js";
 
 export async function ensureSampleContent() {
   const now = new Date();
@@ -49,8 +51,49 @@ export async function ensureSampleContent() {
       thumbnailUrl: ""
     }
   ];
+  const announcements = [
+    {
+      sampleKey: "fictional-announcement-sunday-welcome",
+      title: "A welcome for Sunday",
+      content: "Join us for worship this Sunday. Stay afterward for coffee, conversation, and a chance to meet the community.",
+      publishAt: now,
+      isPublished: true
+    },
+    {
+      sampleKey: "fictional-announcement-community-care",
+      title: "Community care team",
+      content: "Our community care team is collecting practical support requests from neighbors. Contact the church office if you would like to help.",
+      publishAt: now,
+      isPublished: true
+    }
+  ];
+  const ministries = [
+    {
+      sampleKey: "fictional-ministry-community-care",
+      name: "Community Care",
+      description: "A team offering practical help, friendly visits, and support to neighbors during difficult seasons.",
+      meetingTime: "First Saturday of each month",
+      isActive: true
+    },
+    {
+      sampleKey: "fictional-ministry-children-families",
+      name: "Children and Families",
+      description: "A welcoming space for children and caregivers to learn, create, and grow together in faith.",
+      meetingTime: "Sundays during the 10:00 AM service",
+      isActive: true
+    },
+    {
+      sampleKey: "fictional-ministry-music",
+      name: "Music Ministry",
+      description: "Singers and instrumentalists of all experience levels help lead music in worship and community events.",
+      meetingTime: "Thursdays at 6:30 PM",
+      isActive: true
+    }
+  ];
   await Promise.all([
     ...samples.map((event) => Event.updateOne({ sampleKey: event.sampleKey }, { $setOnInsert: event }, { upsert: true })),
-    ...sermons.map((sermon) => Sermon.updateOne({ sampleKey: sermon.sampleKey }, { $setOnInsert: sermon }, { upsert: true }))
+    ...sermons.map((sermon) => Sermon.updateOne({ sampleKey: sermon.sampleKey }, { $setOnInsert: sermon }, { upsert: true })),
+    ...announcements.map((announcement) => Announcement.updateOne({ sampleKey: announcement.sampleKey }, { $setOnInsert: announcement }, { upsert: true })),
+    ...ministries.map((ministry) => Ministry.updateOne({ sampleKey: ministry.sampleKey }, { $setOnInsert: ministry }, { upsert: true }))
   ]);
 }
