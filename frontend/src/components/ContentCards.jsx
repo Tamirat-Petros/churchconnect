@@ -8,7 +8,7 @@ export function EventCard({ event }) {
     <article className="content-card">
       {event.imageUrl && !imageFailed
         ? <img className="card-image" src={event.imageUrl} alt="" loading="lazy" onError={() => setImageFailed(true)} />
-        : event.imageUrl && <div className="card-image-fallback" aria-hidden="true"><span>GRACE COMMUNITY</span><i>✳</i></div>}
+        : <div className="card-image-fallback" aria-hidden="true"><span>GRACE COMMUNITY</span><i>✳</i></div>}
       <div className="card-content">
         <p className="eyebrow">{date.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}</p>
         <h3>{event.title}</h3>
