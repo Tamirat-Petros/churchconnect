@@ -3,6 +3,17 @@ import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { adminApi } from "../services/api.js";
 import { ErrorMessage, Loading } from "../components/Feedback.jsx";
 
+const adminLinks = [
+  ["/admin", "Overview", true],
+  ["/admin/events", "Events"],
+  ["/admin/sermons", "Sermons"],
+  ["/admin/announcements", "Announcements"],
+  ["/admin/ministries", "Ministries"],
+  ["/admin/registrations", "Registrations"],
+  ["/admin/prayer-requests", "Prayer requests"],
+  ["/admin/contact-messages", "Contact messages"]
+];
+
 export default function AdminLayout() {
   const [checking, setChecking] = useState(true);
   const [admin, setAdmin] = useState(null);
@@ -27,16 +38,10 @@ export default function AdminLayout() {
       <aside className="admin-sidebar">
         <Link className="admin-brand" to="/admin"><span className="brand-mark" aria-hidden="true">g</span><span><strong>Grace Community</strong><small>CHURCH ADMIN</small></span></Link>
         <p className="admin-nav-label">WORKSPACE</p>
-        <nav aria-label="Admin navigation">
-          <NavLink to="/admin" end>Overview</NavLink>
-          <NavLink to="/admin/events">Events</NavLink>
-          <NavLink to="/admin/sermons">Sermons</NavLink>
-          <NavLink to="/admin/prayer-requests">Prayer requests</NavLink>
-          <NavLink to="/admin/contact-messages">Contact messages</NavLink>
-        </nav>
+        <nav aria-label="Admin navigation">{adminLinks.map(([to, label, end]) => <NavLink key={to} to={to} end={end}>{label}</NavLink>)}</nav>
         <div className="admin-user"><span className="admin-avatar">{admin.email.charAt(0).toUpperCase()}</span><div><strong>{admin.email}</strong><span>Administrator</span></div><button onClick={signOut} type="button" aria-label="Sign out">↗</button></div>
       </aside>
-      <main className="admin-main"><div className="admin-mobile-top"><Link to="/admin">Grace Community · Admin</Link><button type="button" onClick={signOut}>Sign out</button></div><ErrorMessage>{error}</ErrorMessage><Outlet /></main>
+      <main className="admin-main"><div className="admin-mobile-top"><Link to="/admin">Grace Community · Admin</Link><button type="button" onClick={signOut}>Sign out</button></div><nav className="admin-mobile-nav" aria-label="Admin navigation">{adminLinks.map(([to, label, end]) => <NavLink key={to} to={to} end={end}>{label}</NavLink>)}</nav><ErrorMessage>{error}</ErrorMessage><Outlet /></main>
     </div>
   );
 }
