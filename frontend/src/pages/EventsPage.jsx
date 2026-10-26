@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { EventCard } from "../components/ContentCards.jsx";
+import EventRegistrationForm from "../components/EventRegistrationForm.jsx";
 import { ErrorMessage, Loading } from "../components/Feedback.jsx";
 import { publicApi } from "../services/api.js";
 
@@ -19,7 +20,7 @@ export default function EventsPage() {
       <section className="page-width listing-section">
         {loading ? <Loading label="Loading events..." /> : error ? <ErrorMessage>{error}</ErrorMessage> : <>
           <div className="section-heading"><div><p className="eyebrow">Coming up</p><h2>On the calendar</h2></div></div>
-          {upcoming.length ? <div className="card-grid">{upcoming.map((event) => <EventCard key={event._id} event={event} />)}</div> : <p className="empty-state">There are no upcoming events right now. We’ll share new dates soon.</p>}
+          {upcoming.length ? <div className="card-grid event-listing-grid">{upcoming.map((event) => <div className="event-listing-item" key={event._id}><EventCard event={event} /><EventRegistrationForm eventId={event._id} /></div>)}</div> : <p className="empty-state">There are no upcoming events right now. We’ll share new dates soon.</p>}
           {past.length > 0 && <><div className="section-heading past-heading"><div><p className="eyebrow">The good moments</p><h2>Past gatherings</h2></div></div><div className="card-grid past-events">{past.map((event) => <EventCard key={event._id} event={event} />)}</div></>}
         </>}
       </section>
