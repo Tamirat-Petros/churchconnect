@@ -37,6 +37,31 @@ export function SermonCard({ sermon }) {
   );
 }
 
+export function AnnouncementCard({ announcement }) {
+  return (
+    <article className="announcement-card">
+      <p className="eyebrow">{new Date(announcement.publishAt).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}</p>
+      <h2>{announcement.title}</h2>
+      <p>{announcement.content}</p>
+    </article>
+  );
+}
+
+export function MinistryCard({ ministry }) {
+  const [imageFailed, setImageFailed] = useState(false);
+  return (
+    <article className="content-card ministry-card">
+      {ministry.imageUrl && !imageFailed
+        ? <img className="card-image ministry-image" src={ministry.imageUrl} alt="" loading="lazy" onError={() => setImageFailed(true)} />
+        : <div className="ministry-art" aria-hidden="true"><span>GRACE COMMUNITY</span><i>✳</i></div>}
+      <div className="card-content"><p className="eyebrow">Ministry</p><h2>{ministry.name}</h2><p>{ministry.description}</p>
+        {ministry.meetingTime && <span className="card-meta">Meets {ministry.meetingTime}</span>}
+        {ministry.contactEmail && <a className="text-link" href={`mailto:${ministry.contactEmail}`}>Get in touch <span aria-hidden="true">↗</span></a>}
+      </div>
+    </article>
+  );
+}
+
 export function SectionHeading({ eyebrow, children, action, to }) {
   return (
     <div className="section-heading">

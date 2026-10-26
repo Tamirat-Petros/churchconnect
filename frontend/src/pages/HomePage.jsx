@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { EventCard, SectionHeading, SermonCard } from "../components/ContentCards.jsx";
+import { AnnouncementCard, EventCard, MinistryCard, SectionHeading, SermonCard } from "../components/ContentCards.jsx";
 import { ErrorMessage, Loading } from "../components/Feedback.jsx";
 import { publicApi } from "../services/api.js";
 
 export default function HomePage() {
   const [events, setEvents] = useState([]);
   const [sermons, setSermons] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
+  const [ministries, setMinistries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    Promise.all([publicApi.events(), publicApi.sermons()])
-      .then(([eventData, sermonData]) => {
+    Promise.all([publicApi.events(), publicApi.sermons(), publicApi.announcements(), publicApi.ministries()])
+      .then(([eventData, sermonData, announcementData, ministryData]) => {
         const now = Date.now();
         setEvents(eventData.filter((event) => new Date(event.date).getTime() >= now).slice(0, 2));
         setSermons(sermonData.slice(0, 2));
+        setAnnouncements(announcementData.slice(0, 2));
+        setMinistries(ministryData.slice(0, 2));
       })
       .catch((reason) => setError(reason.message))
       .finally(() => setLoading(false));
@@ -64,9 +68,20 @@ export default function HomePage() {
 
       <section className="sermon-section">
         <div className="page-width content-section">
+          <SectionHeading eyebrow="News from the community" action="All updates" to="/announcements">A few things to know.</SectionHeading>
+          {loading ? <Loading label="Loading announcements..." /> : error ? <ErrorMessage>{error}</ErrorMessage> : announcements.length ? <div className="announcement-list">{announcements.map((announcement) => <AnnouncementCard announcement={announcement} key={announcement._id} />)}</div> : <p className="empty-state">There are no current announcements.</p>}
+        </div>
+      </section>
+
+      <section>
+        <div className="page-width content-section">
           <SectionHeading eyebrow="A moment to reflect" action="Explore all messages" to="/sermons">Words for the week ahead.</SectionHeading>
           {loading ? <Loading label="Loading recent messages..." /> : error ? <ErrorMessage>{error}</ErrorMessage> : sermons.length ? <div className="card-grid">{sermons.map((sermon) => <SermonCard sermon={sermon} key={sermon._id} />)}</div> : <p className="empty-state">New messages will be shared here soon.</p>}
         </div>
+      </section>
+      <section className="page-width content-section">
+        <SectionHeading eyebrow="Find a place to belong" action="Explore ministries" to="/ministries">There’s room for you.</SectionHeading>
+        {loading ? <Loading label="Loading ministries..." /> : error ? <ErrorMessage>{error}</ErrorMessage> : ministries.length ? <div className="card-grid">{ministries.map((ministry) => <MinistryCard ministry={ministry} key={ministry._id} />)}</div> : <p className="empty-state">Ministry details will be shared here soon.</p>}
       </section>
       <section className="prayer-banner page-width"><span className="prayer-mark" aria-hidden="true">✳</span><div><p className="eyebrow">You don’t have to carry it alone</p><h2>We’d be honored to pray with you.</h2></div><Link to="/prayer" className="button button-outline">Share a prayer request</Link></section>
     </>
