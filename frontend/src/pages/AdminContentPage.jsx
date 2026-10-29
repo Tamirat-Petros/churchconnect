@@ -10,7 +10,7 @@ const configurations = {
     description: "Keep the community in the loop about what’s coming up.",
     fields: [
       { name: "title", label: "Event title", required: true, maxLength: 120 },
-      { name: "date", label: "Date and time", type: "datetime-local", required: true },
+      { name: "date", label: "Date and time (EAT)", type: "datetime-local", required: true },
       { name: "location", label: "Location", required: true, maxLength: 160 },
       { name: "imageUrl", label: "Image URL (optional)", type: "url", maxLength: 500 },
       { name: "description", label: "Description", type: "textarea", required: true, minLength: 10, maxLength: 2000 }

@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { churchImages } from "../utils/church-images.js";
+import { formatChurchDate, formatChurchTime } from "../utils/church-date.js";
 
-export function EventCard({ event }) {
+export function EventCard({ event, calendar = "gregory" }) {
   const [imageFailed, setImageFailed] = useState(false);
-  const date = new Date(event.date);
+  const imageSource = event.imageUrl || churchImages.community;
   return (
     <article className="content-card">
-      {event.imageUrl && !imageFailed
-        ? <img className="card-image" src={event.imageUrl} alt="" loading="lazy" onError={() => setImageFailed(true)} />
+      {!imageFailed
+        ? <img className="card-image" src={imageSource} alt="" loading="lazy" onError={() => setImageFailed(true)} />
         : <div className="card-image-fallback" aria-hidden="true"><span>GRACE COMMUNITY</span><i>✳</i></div>}
       <div className="card-content">
-        <p className="eyebrow">{date.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}</p>
+        <p className="eyebrow event-date-label">{formatChurchDate(event.date, calendar)}</p>
         <h3>{event.title}</h3>
         <p>{event.description}</p>
-        <span className="card-meta">{date.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })} · {event.location}</span>
+        <span className="card-meta">{formatChurchTime(event.date)} · {event.location}</span>
       </div>
     </article>
   );
@@ -21,13 +23,14 @@ export function EventCard({ event }) {
 
 export function SermonCard({ sermon }) {
   const [imageFailed, setImageFailed] = useState(false);
+  const imageSource = sermon.thumbnailUrl || churchImages.worship;
   return (
     <article className="content-card sermon-card">
-      {sermon.thumbnailUrl && !imageFailed
-        ? <img className="card-image" src={sermon.thumbnailUrl} alt="" loading="lazy" onError={() => setImageFailed(true)} />
+      {!imageFailed
+        ? <img className="card-image" src={imageSource} alt="" loading="lazy" onError={() => setImageFailed(true)} />
         : <div className="sermon-art" aria-hidden="true"><span>GRACE</span><i>“</i></div>}
       <div className="card-content">
-        <p className="eyebrow">{new Date(sermon.date).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}</p>
+        <p className="eyebrow">{formatChurchDate(sermon.date)}</p>
         <h3>{sermon.title}</h3>
         <p>{sermon.description}</p>
         <span className="card-meta">A message from {sermon.speaker}</span>
@@ -40,7 +43,7 @@ export function SermonCard({ sermon }) {
 export function AnnouncementCard({ announcement }) {
   return (
     <article className="announcement-card">
-      <p className="eyebrow">{new Date(announcement.publishAt).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}</p>
+      <p className="eyebrow">{formatChurchDate(announcement.publishAt)}</p>
       <h2>{announcement.title}</h2>
       <p>{announcement.content}</p>
     </article>
@@ -49,10 +52,11 @@ export function AnnouncementCard({ announcement }) {
 
 export function MinistryCard({ ministry }) {
   const [imageFailed, setImageFailed] = useState(false);
+  const imageSource = ministry.imageUrl || churchImages.community;
   return (
     <article className="content-card ministry-card">
-      {ministry.imageUrl && !imageFailed
-        ? <img className="card-image ministry-image" src={ministry.imageUrl} alt="" loading="lazy" onError={() => setImageFailed(true)} />
+      {!imageFailed
+        ? <img className="card-image ministry-image" src={imageSource} alt="" loading="lazy" onError={() => setImageFailed(true)} />
         : <div className="ministry-art" aria-hidden="true"><span>GRACE COMMUNITY</span><i>✳</i></div>}
       <div className="card-content"><p className="eyebrow">Ministry</p><h2>{ministry.name}</h2><p>{ministry.description}</p>
         {ministry.meetingTime && <span className="card-meta">Meets {ministry.meetingTime}</span>}
