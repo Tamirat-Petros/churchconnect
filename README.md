@@ -1,6 +1,6 @@
 # ChurchConnect
 
-ChurchConnect is a full-stack church website foundation for **Grace Community Church**, a fictional Riverdale congregation. The public site includes church information, events, sermons, announcements, ministries, private prayer requests, and a contact form. Administrators can securely manage content, review inbox submissions, and manage event registrations.
+ChurchConnect is a full-stack church website foundation for **Grace Community Church**, a fictional Addis Ababa congregation. The public site includes church information, events, sermons, announcements, ministries, membership interest, private prayer and pastoral-care requests, and a contact form. Administrators can manage content, follow up on member applications and private inbox submissions, and track event attendance.
 
 ## Stack
 
@@ -70,21 +70,25 @@ Successful responses use `{ "data": ... }`; errors use `{ "error": "...", "detai
 | `GET` | `/api/public/ministries` | Public | List active ministry groups and their public meeting/contact details. |
 | `POST` | `/api/public/events/:eventId/register` | Public, rate limited | Register 1–10 attendees (including the registrant) for a future event; one email can register once per event. |
 | `POST` | `/api/public/prayer-requests` | Public, rate limited | Submit a private prayer request. |
+| `POST` | `/api/public/membership-applications` | Public, rate limited | Ask the church welcome team to make contact; preferred language and optional area/household details are collected. |
 | `POST` | `/api/public/contact-messages` | Public, rate limited | Submit a contact message. |
 | `POST` | `/api/auth/login` | Public, rate limited | Sign in and set the session cookie. |
 | `GET` | `/api/auth/me` | Admin | Return the current administrator. |
 | `POST` | `/api/auth/logout` | Admin | Clear the session cookie. |
-| `GET` | `/api/admin/overview` | Admin | Return counts for events, sermons, announcements, ministries, registrations, and inbox items, including unreviewed counts. |
+| `GET` | `/api/admin/overview` | Admin | Return counts for events, sermons, announcements, ministries, registrations, pending membership applications, and inbox items. |
 | `GET` | `/api/admin/events`, `/sermons`, `/announcements`, or `/ministries` | Admin | List managed records. |
 | `POST` | `/api/admin/events`, `/sermons`, `/announcements`, or `/ministries` | Admin | Create a validated record. |
 | `PUT` | `/api/admin/events/:id`, `/sermons/:id`, `/announcements/:id`, or `/ministries/:id` | Admin | Update a validated record. |
 | `DELETE` | `/api/admin/events/:id`, `/sermons/:id`, `/announcements/:id`, or `/ministries/:id` | Admin | Delete a record; deleting an event also deletes its registrations. |
 | `GET` | `/api/admin/prayer-requests` | Admin | Read private prayer requests. |
 | `GET` | `/api/admin/contact-messages` | Admin | Read contact messages. |
+| `GET` | `/api/admin/members?status=` | Admin | Review membership interest records, optionally filtered by status (`pending`, `contacted`, `active`, or `declined`). |
+| `PATCH` | `/api/admin/members/:id` | Admin | Update membership follow-up status. |
+| `DELETE` | `/api/admin/members/:id` | Admin | Permanently remove a membership application and its contact details. |
 | `PATCH` | `/api/admin/inbox/prayer-requests/:id/review` or `/api/admin/inbox/contact-messages/:id/review` | Admin | Mark a private inbox item reviewed or unreviewed using `{ "reviewed": true }`. |
 | `DELETE` | `/api/admin/inbox/prayer-requests/:id` or `/api/admin/inbox/contact-messages/:id` | Admin | Permanently delete a private inbox item. |
 | `GET` | `/api/admin/registrations?eventId=` | Admin | List event registrations, optionally filtered by event. Each record includes `attendeeCount`. |
-| `PATCH` | `/api/admin/registrations/:id` | Admin | Set registration status to `registered` or `cancelled`. |
+| `PATCH` | `/api/admin/registrations/:id` | Admin | Track `registered`, `cancelled`, `attended`, or `no-show` status. |
 | `DELETE` | `/api/admin/registrations/:id` | Admin | Permanently delete a registration and its contact details. |
 
 Example event registration body:
@@ -128,4 +132,6 @@ frontend/
   src/services/       API client and tests
 ```
 
-Grace Community Church, its history, events, sermons, people, address, email, and telephone number are fictional portfolio content. No donation or payment processing is included.
+Event dates are shown in Addis Ababa time (EAT). The public event page can switch between the Ethiopian (Amete Mihret) and Gregorian calendars when supported by the visitor's browser. The public forms offer English, Amharic, Afaan Oromo, and Tigrinya language preferences for follow-up.
+
+Grace Community Church, its history, events, sermons, people, and Addis Ababa profile are fictional portfolio content. No donation or payment processing is included. Replace sample content and Unsplash imagery with church-approved details before launch.
