@@ -6,9 +6,10 @@ import { ContactMessage } from "../models/ContactMessage.js";
 import { Announcement } from "../models/Announcement.js";
 import { Ministry } from "../models/Ministry.js";
 import { EventRegistration } from "../models/EventRegistration.js";
+import { Member } from "../models/Member.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { HttpError } from "../utils/http-error.js";
-import { contactMessageSchema, eventRegistrationSchema, parseBody, prayerRequestSchema } from "../utils/validation.js";
+import { contactMessageSchema, eventRegistrationSchema, memberApplicationSchema, parseBody, prayerRequestSchema } from "../utils/validation.js";
 
 export const listPublicEvents = asyncHandler(async (_req, res) => {
   const events = await Event.find().select("title description date location imageUrl").sort({ date: 1 }).limit(200).lean();
@@ -84,6 +85,12 @@ export const submitPrayerRequest = asyncHandler(async (req, res) => {
   const input = parseBody(prayerRequestSchema, req.body);
   await PrayerRequest.create(input);
   res.status(201).json({ data: { message: "Your prayer request has been received." } });
+});
+
+export const submitMembershipApplication = asyncHandler(async (req, res) => {
+  const input = parseBody(memberApplicationSchema, req.body);
+  await Member.create(input);
+  res.status(201).json({ data: { message: "Thank you for your interest. Our community team will be in touch." } });
 });
 
 export const submitContactMessage = asyncHandler(async (req, res) => {

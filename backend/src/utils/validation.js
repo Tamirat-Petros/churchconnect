@@ -47,7 +47,11 @@ export const eventRegistrationSchema = z.object({
 });
 
 export const registrationStatusSchema = z.object({
-  status: z.enum(["registered", "cancelled"])
+  status: z.enum(["registered", "cancelled", "attended", "no-show"])
+});
+
+export const memberStatusSchema = z.object({
+  status: z.enum(["pending", "contacted", "active", "declined"])
 });
 
 export const reviewStatusSchema = z.object({
@@ -57,7 +61,30 @@ export const reviewStatusSchema = z.object({
 export const prayerRequestSchema = z.object({
   name: optionalString(100),
   email: z.union([z.string().trim().email().max(254), z.literal("")]).optional(),
+  phone: optionalString(40),
+  careType: z.enum(["prayer", "pastoral-visit", "hospital-visit", "counseling", "bereavement", "family-support"]).default("prayer"),
+  preferredLanguage: z.enum(["en", "am", "om", "ti"]).default("en"),
+  preferredContactMethod: z.enum(["no-contact", "email", "phone"]).default("no-contact"),
   request: z.string().trim().min(10).max(3000)
+}).refine((value) => value.preferredContactMethod !== "email" || Boolean(value.email), {
+  message: "Add an email address or choose another contact option.",
+  path: ["email"]
+}).refine((value) => value.preferredContactMethod !== "phone" || Boolean(value.phone), {
+  message: "Add a phone number or choose another contact option.",
+  path: ["phone"]
+});
+
+export const memberApplicationSchema = z.object({
+  fullName: z.string().trim().min(2).max(100),
+  email: z.union([z.string().trim().email().max(254), z.literal("")]).optional(),
+  phone: optionalString(40),
+  preferredLanguage: z.enum(["en", "am", "om", "ti"]).default("en"),
+  city: optionalString(120),
+  householdName: optionalString(120),
+  introduction: optionalString(1200)
+}).refine((value) => Boolean(value.email || value.phone), {
+  message: "Please provide an email address or phone number so we can contact you.",
+  path: ["email"]
 });
 
 export const contactMessageSchema = z.object({

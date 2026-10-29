@@ -7,6 +7,7 @@ import {
   listPublicSermons,
   registerForEvent,
   submitContactMessage,
+  submitMembershipApplication,
   submitPrayerRequest
 } from "../controllers/public-controller.js";
 
@@ -25,6 +26,7 @@ router.get("/announcements", listPublicAnnouncements);
 router.get("/ministries", listPublicMinistries);
 router.post("/events/:eventId/register", submissionLimiter, registerForEvent);
 router.post("/prayer-requests", submissionLimiter, submitPrayerRequest);
+router.post("/membership-applications", submissionLimiter, submitMembershipApplication);
 router.post("/contact-messages", submissionLimiter, submitContactMessage);
 
 export default router;

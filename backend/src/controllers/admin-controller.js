@@ -6,12 +6,14 @@ import { ContactMessage } from "../models/ContactMessage.js";
 import { Announcement } from "../models/Announcement.js";
 import { Ministry } from "../models/Ministry.js";
 import { EventRegistration } from "../models/EventRegistration.js";
+import { Member } from "../models/Member.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { HttpError } from "../utils/http-error.js";
 import {
   announcementSchema,
   eventSchema,
   ministrySchema,
+  memberStatusSchema,
   parseBody,
   registrationStatusSchema,
   reviewStatusSchema,
@@ -26,7 +28,7 @@ const collections = {
 };
 
 export const overview = asyncHandler(async (_req, res) => {
-  const [events, sermons, prayerRequests, contactMessages, announcements, ministries, registrations, unreviewedPrayerRequests, unreviewedContactMessages] = await Promise.all([
+  const [events, sermons, prayerRequests, contactMessages, announcements, ministries, registrations, pendingMembers, unreviewedPrayerRequests, unreviewedContactMessages] = await Promise.all([
     Event.countDocuments(),
     Sermon.countDocuments(),
     PrayerRequest.countDocuments(),
@@ -34,10 +36,36 @@ export const overview = asyncHandler(async (_req, res) => {
     Announcement.countDocuments(),
     Ministry.countDocuments(),
     EventRegistration.countDocuments({ status: "registered" }),
+    Member.countDocuments({ status: "pending" }),
     PrayerRequest.countDocuments({ reviewed: false }),
     ContactMessage.countDocuments({ reviewed: false })
   ]);
-  res.json({ data: { events, sermons, announcements, ministries, registrations, prayerRequests, contactMessages, unreviewedPrayerRequests, unreviewedContactMessages } });
+  res.json({ data: { events, sermons, announcements, ministries, registrations, pendingMembers, prayerRequests, contactMessages, unreviewedPrayerRequests, unreviewedContactMessages } });
+});
+
+export const listMembers = asyncHandler(async (req, res) => {
+  const filter = {};
+  if (typeof req.query.status === "string" && req.query.status) {
+    filter.status = parseBody(memberStatusSchema, { status: req.query.status }).status;
+  }
+  const members = await Member.find(filter).sort({ createdAt: -1 }).limit(500).lean();
+  res.json({ data: members });
+});
+
+export const updateMemberStatus = asyncHandler(async (req, res) => {
+  const { status } = parseBody(memberStatusSchema, req.body);
+  const member = await Member.findByIdAndUpdate(validId(req.params.id), {
+    status,
+    reviewedAt: status === "pending" ? null : new Date()
+  }, { new: true, runValidators: true, strict: "throw" }).lean();
+  if (!member) throw new HttpError(404, "Membership application not found.");
+  res.json({ data: member });
+});
+
+export const deleteMember = asyncHandler(async (req, res) => {
+  const member = await Member.findByIdAndDelete(validId(req.params.id));
+  if (!member) throw new HttpError(404, "Membership application not found.");
+  res.json({ data: { message: "Membership application deleted." } });
 });
 
 export const listCollection = asyncHandler(async (req, res) => {
