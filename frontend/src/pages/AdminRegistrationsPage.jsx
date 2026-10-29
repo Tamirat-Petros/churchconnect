@@ -27,10 +27,10 @@ export default function AdminRegistrationsPage() {
   async function updateStatus(item) {
     setError("");
     setSuccess("");
-    const status = item.status === "registered" ? "cancelled" : "registered";
+    const status = item.nextStatus;
     try {
       await adminApi.updateRegistration(item._id, status);
-      setSuccess(status === "cancelled" ? "Registration cancelled." : "Registration restored.");
+      setSuccess(`Registration marked ${status.replaceAll("-", " ")}.`);
       await loadRegistrations();
     } catch (reason) { setError(reason.message); }
   }
@@ -54,12 +54,12 @@ export default function AdminRegistrationsPage() {
       </div>
       <ErrorMessage>{error}</ErrorMessage><SuccessMessage>{success}</SuccessMessage>
       {loading ? <Loading label="Loading registrations..." /> : registrations.length ? <div className="admin-table-wrap"><table className="admin-table registrations-table"><thead><tr><th>Event</th><th>Registrant</th><th>Attending</th><th>Status</th><th>Registered</th><th><span className="sr-only">Actions</span></th></tr></thead><tbody>{registrations.map((item) => <tr key={item._id}>
-        <td><strong>{item.eventId?.title || "Event removed"}</strong>{item.eventId?.date && <span className="table-description">{new Date(item.eventId.date).toLocaleString()}</span>}</td>
+        <td><strong>{item.eventId?.title || "Event removed"}</strong>{item.eventId?.date && <span className="table-description">{new Date(item.eventId.date).toLocaleString("en-ET", { timeZone: "Africa/Addis_Ababa", dateStyle: "medium", timeStyle: "short" })} EAT</span>}</td>
         <td><strong>{item.name}</strong><span className="table-description"><a href={`mailto:${item.email}`}>{item.email}</a></span>{item.phone && <span className="table-description">{item.phone}</span>}</td>
         <td>{item.attendeeCount}</td>
-        <td><span className={`status-pill ${item.status === "registered" ? "status-active" : "status-muted"}`}>{item.status}</span></td>
+        <td><span className={`status-pill ${item.status === "registered" || item.status === "attended" ? "status-active" : "status-muted"}`}>{item.status.replaceAll("-", " ")}</span></td>
         <td>{new Date(item.createdAt).toLocaleDateString()}</td>
-        <td className="row-actions"><button type="button" onClick={() => updateStatus(item)}>{item.status === "registered" ? "Cancel" : "Restore"}</button><button className="danger-link" type="button" onClick={() => remove(item)}>Delete</button></td>
+        <td className="row-actions">{item.status === "registered" ? <><button type="button" onClick={() => updateStatus({ ...item, nextStatus: "attended" })}>Attended</button><button type="button" onClick={() => updateStatus({ ...item, nextStatus: "no-show" })}>No show</button><button type="button" onClick={() => updateStatus({ ...item, nextStatus: "cancelled" })}>Cancel</button></> : <button type="button" onClick={() => updateStatus({ ...item, nextStatus: "registered" })}>Restore</button>}<button className="danger-link" type="button" onClick={() => remove(item)}>Delete</button></td>
       </tr>)}</tbody></table></div> : !error && <div className="empty-state admin-empty"><p>No registrations {eventId ? "for this event" : "yet"}.</p></div>}
     </section>
   );

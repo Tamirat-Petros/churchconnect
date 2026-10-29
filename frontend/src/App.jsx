@@ -7,10 +7,12 @@ import AdminContentPage from "./pages/AdminContentPage.jsx";
 import AdminDashboardPage from "./pages/AdminDashboardPage.jsx";
 import AdminInboxPage from "./pages/AdminInboxPage.jsx";
 import AdminLoginPage from "./pages/AdminLoginPage.jsx";
+import AdminMembersPage from "./pages/AdminMembersPage.jsx";
 import AdminRegistrationsPage from "./pages/AdminRegistrationsPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
 import EventsPage from "./pages/EventsPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import JoinPage from "./pages/JoinPage.jsx";
 import MinistriesPage from "./pages/MinistriesPage.jsx";
 import PrayerPage from "./pages/PrayerPage.jsx";
 import SermonsPage from "./pages/SermonsPage.jsx";
@@ -26,6 +28,7 @@ export default function App() {
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminDashboardPage />} />
         <Route path="registrations" element={<AdminRegistrationsPage />} />
+        <Route path="members" element={<AdminMembersPage />} />
         <Route path=":collection" element={<AdminContentPage />} />
         <Route path="prayer-requests" element={<AdminInboxPage />} />
         <Route path="contact-messages" element={<AdminInboxPage />} />
@@ -36,6 +39,7 @@ export default function App() {
         <Route path="events" element={<EventsPage />} />
         <Route path="sermons" element={<SermonsPage />} />
         <Route path="ministries" element={<MinistriesPage />} />
+        <Route path="join" element={<JoinPage />} />
         <Route path="announcements" element={<AnnouncementsPage />} />
         <Route path="prayer" element={<PrayerPage />} />
         <Route path="contact" element={<ContactPage />} />

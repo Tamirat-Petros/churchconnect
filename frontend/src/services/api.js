@@ -39,6 +39,7 @@ export const publicApi = {
   ministries: () => api("/public/ministries"),
   registerForEvent: (eventId, data) => api(`/public/events/${encodeURIComponent(eventId)}/register`, { method: "POST", body: JSON.stringify(data) }),
   pray: (data) => api("/public/prayer-requests", { method: "POST", body: JSON.stringify(data) }),
+  applyMembership: (data) => api("/public/membership-applications", { method: "POST", body: JSON.stringify(data) }),
   contact: (data) => api("/public/contact-messages", { method: "POST", body: JSON.stringify(data) })
 };
 
@@ -53,6 +54,9 @@ export const adminApi = {
   remove: (collection, id) => api(`/admin/${collection}/${id}`, { method: "DELETE" }),
   prayerRequests: () => api("/admin/prayer-requests"),
   contactMessages: () => api("/admin/contact-messages"),
+  members: (status = "") => api(`/admin/members${status ? `?status=${encodeURIComponent(status)}` : ""}`),
+  updateMember: (id, status) => api(`/admin/members/${id}`, { method: "PATCH", body: JSON.stringify({ status }) }),
+  removeMember: (id) => api(`/admin/members/${id}`, { method: "DELETE" }),
   registrations: (eventId = "") => api(`/admin/registrations${eventId ? `?eventId=${encodeURIComponent(eventId)}` : ""}`),
   updateRegistration: (id, status) => api(`/admin/registrations/${id}`, { method: "PATCH", body: JSON.stringify({ status }) }),
   removeRegistration: (id) => api(`/admin/registrations/${id}`, { method: "DELETE" }),

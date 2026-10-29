@@ -8,6 +8,7 @@ function MessageCard({ item, type, onReview, onDelete, busy }) {
     <article className="inbox-card">
       <div className="inbox-card-top"><div><p className="eyebrow">{new Date(item.createdAt).toLocaleString()}</p><h2>{type === "prayer" ? item.name || "Shared anonymously" : item.name}</h2><span className={`status-pill ${item.reviewed ? "status-muted" : "status-active"}`}>{item.reviewed ? "Reviewed" : "New"}</span></div>{item.email && <a className="text-link" href={`mailto:${item.email}`}>{item.email} ↗</a>}</div>
       {type === "contact" && <h3 className="inbox-subject">{item.subject}</h3>}
+      {type === "prayer" && <div className="care-details"><span>{(item.careType || "prayer").replaceAll("-", " ")}</span><span>{({ en: "English", am: "Amharic", om: "Afaan Oromo", ti: "Tigrinya" })[item.preferredLanguage] || "English"}</span>{item.preferredContactMethod && item.preferredContactMethod !== "no-contact" && <span>Contact by {item.preferredContactMethod}</span>}{item.phone && <a href={`tel:${item.phone}`}>{item.phone}</a>}</div>}
       <p className="inbox-message">{type === "prayer" ? item.request : item.message}</p>
       <div className="inbox-actions"><button className="text-link" type="button" disabled={busy} onClick={() => onReview(item)}>{item.reviewed ? "Mark as new" : "Mark reviewed"}</button><button className="danger-link" type="button" disabled={busy} onClick={() => onDelete(item)}>Delete</button></div>
     </article>

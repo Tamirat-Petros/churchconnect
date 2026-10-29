@@ -9,6 +9,7 @@ const adminLinks = [
   ["/admin/sermons", "Sermons"],
   ["/admin/announcements", "Announcements"],
   ["/admin/ministries", "Ministries"],
+  ["/admin/members", "Members"],
   ["/admin/registrations", "Registrations"],
   ["/admin/prayer-requests", "Prayer requests"],
   ["/admin/contact-messages", "Contact messages"]
@@ -36,7 +37,7 @@ export default function AdminLayout() {
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <Link className="admin-brand" to="/admin"><span className="brand-mark" aria-hidden="true">g</span><span><strong>Grace Community</strong><small>CHURCH ADMIN</small></span></Link>
+        <Link className="admin-brand" to="/admin"><img className="brand-emblem" src="/images/grace-community-logo.svg" alt="" /><span><strong>Grace Community</strong><small>CHURCH ADMIN</small></span></Link>
         <p className="admin-nav-label">WORKSPACE</p>
         <nav aria-label="Admin navigation">{adminLinks.map(([to, label, end]) => <NavLink key={to} to={to} end={end}>{label}</NavLink>)}</nav>
         <div className="admin-user"><span className="admin-avatar">{admin.email.charAt(0).toUpperCase()}</span><div><strong>{admin.email}</strong><span>Administrator</span></div><button onClick={signOut} type="button" aria-label="Sign out">↗</button></div>

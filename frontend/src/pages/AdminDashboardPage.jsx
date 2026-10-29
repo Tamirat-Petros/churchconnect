@@ -9,6 +9,7 @@ const cards = [
   ["announcements", "Announcements", "/admin/announcements", "Updates"],
   ["ministries", "Ministries", "/admin/ministries", "Community"],
   ["registrations", "Active registrations", "/admin/registrations", "Events"],
+  ["pendingMembers", "Membership requests", "/admin/members", "Welcome team"],
   ["unreviewedPrayerRequests", "New prayer requests", "/admin/prayer-requests", "Private inbox"],
   ["unreviewedContactMessages", "New contact messages", "/admin/contact-messages", "Inbox"]
 ];
