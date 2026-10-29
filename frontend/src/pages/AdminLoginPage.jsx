@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
   return (
     <main className="login-page">
       <section className="login-card">
-        <Link className="brand" to="/"><span className="brand-mark" aria-hidden="true">g</span><span><strong>Grace Community</strong><small>CHURCH · RIVERDALE</small></span></Link>
+        <Link className="brand" to="/"><img className="brand-emblem" src="/images/grace-community-logo.svg" alt="" /><span><strong>Grace Community</strong><small>CHURCH · ADDIS ABABA</small></span></Link>
         <p className="eyebrow">ADMINISTRATOR ACCESS</p><h1>Welcome back.</h1><p className="login-copy">Sign in to manage the church website and messages.</p>
         <form onSubmit={submit}>
           <ErrorMessage>{error}</ErrorMessage>

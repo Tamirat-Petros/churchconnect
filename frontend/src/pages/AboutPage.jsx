@@ -9,10 +9,10 @@ const values = [
 export default function AboutPage() {
   return (
     <>
-      <section className="page-hero page-width"><p className="eyebrow">Our story</p><h1>A church with<br /><em>room to grow.</em></h1><p>Rooted in Riverdale, open to everyone. We’re glad you found us.</p></section>
+      <section className="page-hero page-width"><p className="eyebrow">Our story</p><h1>A church with<br /><em>room to grow.</em></h1><p>Rooted in Addis Ababa, open to everyone. We’re glad you found us.</p></section>
       <section className="story-section page-width">
         <div><p className="eyebrow">A little history</p><h2>Neighbors first.<br />Church, together.</h2></div>
-        <div className="story-copy"><p>Grace Community began in 1987, when a handful of Riverdale families started gathering around a shared table. They hoped to build a church that felt less like a building you visited and more like a community you belonged to.</p><p>Today, we’re still learning what that looks like. We worship, share meals, tend a neighborhood garden, and make time for people who need a listening ear. Our life together is a work in progress—and there’s room for you in it.</p><p className="signature">With grace, <span>The Grace Community family</span></p></div>
+        <div className="story-copy"><p>Grace Community began in 1987, when a handful of Addis Ababa families started gathering around a shared table. They hoped to build a church that felt less like a building you visited and more like a community you belonged to.</p><p>Today, we’re still learning what that looks like. We worship, share meals, tend a neighborhood garden, and make time for people who need a listening ear. Our life together is a work in progress—and there’s room for you in it.</p><p className="signature">With grace, <span>The Grace Community family</span></p></div>
       </section>
       <section className="mission-vision-section">
         <div className="page-width mission-vision-grid">

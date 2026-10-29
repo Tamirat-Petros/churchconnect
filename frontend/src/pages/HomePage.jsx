@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { AnnouncementCard, EventCard, MinistryCard, SectionHeading, SermonCard } from "../components/ContentCards.jsx";
 import { ErrorMessage, Loading } from "../components/Feedback.jsx";
 import { publicApi } from "../services/api.js";
+import { churchImages } from "../utils/church-images.js";
 
 export default function HomePage() {
   const [events, setEvents] = useState([]);
@@ -28,20 +29,21 @@ export default function HomePage() {
   return (
     <>
       <section className="hero">
+        <div className="hero-media"><img src={churchImages.hero} alt="A congregation gathered for worship" fetchPriority="high" /></div>
         <div className="hero-shade" />
         <div className="hero-content page-width">
-          <p className="hero-kicker">A community of faith in Riverdale</p>
+          <p className="hero-kicker">A community of faith in Addis Ababa</p>
           <h1>There’s a place<br />for you <em>here.</em></h1>
           <p className="hero-copy">Come as you are. Find good people, honest hope, and a faith that makes room for everyone.</p>
           <div className="hero-actions"><Link to="/about" className="button button-gold">Get to know us</Link><a href="#visit" className="button button-ghost">Plan your visit</a></div>
-          <div className="hero-service"><span className="service-dot" /> SUNDAYS AT 10:00 AM <span className="service-divider">·</span> 24 WILLOW STREET</div>
+          <div className="hero-service"><span className="service-dot" /> SUNDAYS AT 10:00 AM EAT <span className="service-divider">·</span> ADDIS ABABA, ETHIOPIA</div>
         </div>
         <aside className="hero-aside" aria-label="Sunday worship details">
           <span className="hero-aside-mark" aria-hidden="true">g</span>
           <p className="hero-aside-label">A SUNDAY TOGETHER</p>
           <strong>There’s room<br />for <em>everyone.</em></strong>
           <span className="hero-aside-rule" />
-          <p>Worship with us<br /><b>Sunday · 10:00 am</b></p>
+          <p>Worship with us<br /><b>Sunday · 10:00 am EAT</b></p>
         </aside>
         <a className="hero-scroll" href="#welcome" aria-label="Scroll to learn more">↓</a>
       </section>
@@ -67,7 +69,7 @@ export default function HomePage() {
       <section className="visit-band" id="visit">
         <div className="page-width visit-inner">
           <div><p className="eyebrow">Your Sunday, made simple</p><h2>Come exactly as you are.</h2><p>Gather with us for an hour of music, a thoughtful message, and a warm hello.</p></div>
-          <div className="visit-facts"><p><strong>Sunday worship</strong><span>10:00 am · All ages welcome</span></p><p><strong>Find us</strong><span>24 Willow Street, Riverdale</span></p></div>
+          <div className="visit-facts"><p><strong>Sunday worship</strong><span>10:00 am EAT · All ages welcome</span></p><p><strong>Find us</strong><span>Addis Ababa, Ethiopia</span></p></div>
           <Link className="button button-outline" to="/contact">Get directions</Link>
         </div>
       </section>

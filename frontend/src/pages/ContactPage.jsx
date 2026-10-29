@@ -21,9 +21,9 @@ export default function ContactPage() {
       <section className="page-hero page-width"><p className="eyebrow">We’d love to hear from you</p><h1>Say hello.<br /><em>Ask anything.</em></h1><p>Planning a visit, looking for directions, or just have a question? We’re happy to help.</p></section>
       <section className="contact-layout page-width">
         <aside className="contact-details">
-          <div><p className="eyebrow">Come by</p><h2>Find us in<br />the neighborhood.</h2><p>24 Willow Street<br />Riverdale, NY 10001</p><a className="text-link" href="https://maps.google.com/?q=24+Willow+Street+Riverdale" target="_blank" rel="noreferrer">Open map <span aria-hidden="true">↗</span></a></div>
+          <div><p className="eyebrow">Come by</p><h2>Find us in<br />the neighborhood.</h2><p>Addis Ababa<br />Ethiopia</p><a className="text-link" href="https://maps.google.com/?q=Addis+Ababa+Ethiopia" target="_blank" rel="noreferrer">Explore the area <span aria-hidden="true">↗</span></a></div>
           <div><p className="eyebrow">Gather with us</p><p><strong>Sunday worship</strong><br />10:00 am · All ages welcome</p><p><strong>Office hours</strong><br />Tuesday–Thursday, 9:00 am–3:00 pm</p></div>
-          <div><p className="eyebrow">Reach out</p><p><a href="mailto:hello@gracecommunity.example">hello@gracecommunity.example</a><br /><a href="tel:+15550142000">(555) 014-2000</a></p></div>
+          <div><p className="eyebrow">Reach out</p><p>Use the message form and our team can follow up with you.<br />Addis Ababa, Ethiopia</p></div>
         </aside>
         <form className="form-card" onSubmit={submit}>
           <h2>Send us a note</h2><ErrorMessage>{error}</ErrorMessage><SuccessMessage>{success}</SuccessMessage>

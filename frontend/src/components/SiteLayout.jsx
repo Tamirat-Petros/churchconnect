@@ -7,6 +7,7 @@ const links = [
   ["/sermons", "Sermons"],
   ["/ministries", "Ministries"],
   ["/announcements", "Updates"],
+  ["/join", "Join us"],
   ["/contact", "Contact"]
 ];
 
@@ -17,8 +18,8 @@ export default function SiteLayout() {
       <header className="site-header">
         <div className="header-inner">
           <Link className="brand" to="/" aria-label="Grace Community Church home" onClick={() => setMenuOpen(false)}>
-            <span className="brand-mark" aria-hidden="true">g</span>
-            <span><strong>Grace Community</strong><small>CHURCH · RIVERDALE</small></span>
+            <img className="brand-emblem" src="/images/grace-community-logo.svg" alt="" />
+            <span><strong>Grace Community</strong><small>CHURCH · ADDIS ABABA</small></span>
           </Link>
           <button className="menu-toggle" type="button" aria-expanded={menuOpen} aria-label="Toggle navigation" onClick={() => setMenuOpen(!menuOpen)}>
             <span /><span /><span />
@@ -34,14 +35,14 @@ export default function SiteLayout() {
         <div className="footer-inner">
           <div>
             <Link className="brand brand-light" to="/">
-              <span className="brand-mark" aria-hidden="true">g</span>
-              <span><strong>Grace Community</strong><small>CHURCH · RIVERDALE</small></span>
+              <img className="brand-emblem" src="/images/grace-community-logo.svg" alt="" />
+              <span><strong>Grace Community</strong><small>CHURCH · ADDIS ABABA</small></span>
             </Link>
-            <p>A place to find belonging, purpose, and room to grow.</p>
+            <p>A place to worship, serve, and grow together in Addis Ababa.</p>
           </div>
           <div className="footer-details">
-            <p><strong>Sunday worship</strong><br />10:00 am · 24 Willow Street, Riverdale</p>
-            <p><a href="mailto:hello@gracecommunity.example">hello@gracecommunity.example</a><br /><a href="tel:+15550142000">(555) 014-2000</a></p>
+            <p><strong>Sunday worship</strong><br />10:00 am EAT · Addis Ababa, Ethiopia</p>
+            <p>Contact us through the<br /><Link to="/contact">church contact page</Link>.</p>
           </div>
         </div>
         <div className="footer-bottom"><span>© {new Date().getFullYear()} Grace Community Church</span><Link to="/admin/login">Administrator sign in</Link></div>
